@@ -11,6 +11,11 @@ class Core
     {
         String output = "";
         int remainder = 0;
+
+        if (whole == 0) {
+            return "0";
+        }
+
         while (whole != 0) {
             remainder = whole % base;
             whole /= base;
@@ -61,7 +66,7 @@ class Core
             errorMessage += " Decimal contains more than one decimal point.";
         }
 
-        if (!decimal.matches("[0-9.]+")) {
+        if (!decimal.matches("[0-9.]+") && decimal.length() > 0) {
             errorMessage += " Input contains letters and symbols (excluding decimal point).";
         }
 
@@ -70,19 +75,19 @@ class Core
             return errorMessage;
         }
 
-        String numbers[] = decimal.split("\\.");
+        String output = "";
 
-        int whole = Integer.parseInt(numbers[0]);
+        if (decimal.contains(".")) {
+            decimal = "0" + decimal;
+            System.out.println(decimal);
+            String numbers[] = decimal.split("\\.");
 
-        int places = numbers[1].length();
-        double fractional = Integer.parseInt(numbers[1]) / Math.pow(10, places);
-
-        return wholeToBase(whole, base) + "." + fractionalToBase(fractional, base, numPlaces);
-    }
-
-    public static void main(String[] args)
-    {
-        Core c = new Core();
-        System.out.println(c.decimalToBase("6.9", 2, 10));
+            int whole = Integer.parseInt(numbers[0]);
+            int places = numbers[1].length();
+            double fractional = Integer.parseInt(numbers[1]) / Math.pow(10, places);
+            return wholeToBase(whole, base) + "." + fractionalToBase(fractional, base, numPlaces);
+        } else {
+            return wholeToBase(Integer.parseInt(decimal), base);
+        }
     }
 }
